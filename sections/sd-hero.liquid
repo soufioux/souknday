@@ -1,0 +1,132 @@
+{% comment %}
+  SouknDay — Hero section (éditable depuis l'éditeur de thème : image, textes, boutons)
+{% endcomment %}
+<style>
+  .sd-hero-{{ section.id }}, .sd-hero-{{ section.id }} * { box-sizing: border-box; }
+  .sd-hero-{{ section.id }} {
+    --sd-green: #1F6E4A; --sd-orange: #F5900F; --sd-dark: #0F2E20; --sd-cream: #FCEFE3;
+    width: 100%; padding: 14px 10px 30px;
+    background: linear-gradient(180deg, #ffffff 0%, #f4faf6 100%);
+  }
+  .sd-hero-{{ section.id }} .sd-hero__box {
+    width: 100%; max-width: 1280px; margin: 0 auto; position: relative; overflow: hidden;
+    border-radius: 30px; background: linear-gradient(145deg, var(--sd-dark) 0%, #14261c 48%, var(--sd-green) 100%);
+    box-shadow: 0 24px 70px rgba(15,46,32,0.22);
+  }
+  .sd-hero-{{ section.id }} .sd-hero__grid { position: relative; z-index: 2; display: flex; flex-direction: column; }
+  .sd-hero-{{ section.id }} .sd-hero__visual {
+    order: 1; height: 260px; min-height: 260px; position: relative; overflow: hidden;
+    background: var(--sd-dark);
+  }
+  .sd-hero-{{ section.id }} .sd-hero__visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sd-hero-{{ section.id }} .sd-hero__visual::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(15,46,32,0) 45%, rgba(15,46,32,0.9) 100%);
+  }
+  .sd-hero-{{ section.id }} .sd-hero__badge {
+    position: absolute; top: 14px; right: 14px; z-index: 5; width: 140px; padding: 11px;
+    border-radius: 16px; background: var(--sd-cream); color: var(--sd-dark);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.24);
+  }
+  .sd-hero-{{ section.id }} .sd-hero__badge small { display: block; margin-bottom: 5px; color: var(--sd-green); font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+  .sd-hero-{{ section.id }} .sd-hero__badge strong { display: block; font-size: 14.5px; font-weight: 950; letter-spacing: -.03em; }
+  .sd-hero-{{ section.id }} .sd-hero__content { order: 2; position: relative; z-index: 4; margin-top: -26px; padding: 34px 22px 26px; }
+  .sd-hero-{{ section.id }} .sd-hero__pill {
+    display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; margin-bottom: 14px;
+    border-radius: 999px; color: var(--sd-cream); background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.16); font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em;
+  }
+  .sd-hero-{{ section.id }} .sd-hero__dot { width: 5px; height: 5px; border-radius: 999px; background: var(--sd-orange); display: inline-block; }
+  .sd-hero-{{ section.id }} .sd-hero__title { margin: 0 0 14px; color: #fff; font-family: Georgia, serif; font-size: 34px; line-height: 1; letter-spacing: -.05em; font-weight: 900; }
+  .sd-hero-{{ section.id }} .sd-hero__title em { color: var(--sd-orange); font-style: normal; }
+  .sd-hero-{{ section.id }} .sd-hero__subtitle { margin: 0 0 18px; color: rgba(255,255,255,.78); font-size: 14px; line-height: 1.55; font-weight: 600; }
+  .sd-hero-{{ section.id }} .sd-hero__buttons { display: grid; gap: 10px; margin-bottom: 18px; }
+  .sd-hero-{{ section.id }} .sd-hero__btn { min-height: 48px; padding: 0 18px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; text-decoration: none !important; transition: transform .2s ease; }
+  .sd-hero-{{ section.id }} .sd-hero__btn--main { background: var(--sd-orange) !important; color: #fff !important; }
+  .sd-hero-{{ section.id }} .sd-hero__btn--second { background: transparent !important; color: var(--sd-cream) !important; border: 2px solid var(--sd-cream) !important; }
+  .sd-hero-{{ section.id }} .sd-hero__btn:hover { transform: translateY(-2px); }
+  .sd-hero-{{ section.id }} .sd-hero__trust { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sd-hero-{{ section.id }} .sd-hero__trust span { padding: 7px 9px; border-radius: 999px; color: rgba(255,255,255,.84); background: rgba(255,255,255,.08); font-size: 10.5px; font-weight: 800; }
+
+  @media (min-width: 750px) {
+    .sd-hero-{{ section.id }} .sd-hero__box { border-radius: 44px; min-height: 560px; padding: 58px; }
+    .sd-hero-{{ section.id }} .sd-hero__grid { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 38px; height: 100%; }
+    .sd-hero-{{ section.id }} .sd-hero__content { order: 1; padding: 0; }
+    .sd-hero-{{ section.id }} .sd-hero__visual { order: 2; height: 460px; border-radius: 36px; }
+    .sd-hero-{{ section.id }} .sd-hero__title { font-size: clamp(52px, 5.6vw, 78px); line-height: .95; margin-bottom: 24px; }
+    .sd-hero-{{ section.id }} .sd-hero__subtitle { font-size: 18px; max-width: 480px; margin-bottom: 30px; }
+    .sd-hero-{{ section.id }} .sd-hero__buttons { display: flex; gap: 14px; }
+    .sd-hero-{{ section.id }} .sd-hero__btn { width: auto; min-height: 52px; padding: 0 24px; font-size: 15px; }
+  }
+</style>
+
+<section class="sd-hero-{{ section.id }}">
+  <div class="sd-hero__box">
+    <div class="sd-hero__grid">
+      <div class="sd-hero__visual">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1600 | image_tag:
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '400,600,900,1200,1600',
+              sizes: '(min-width: 750px) 50vw, 100vw',
+              alt: section.settings.image.alt | default: section.settings.heading
+          }}
+        {%- endif -%}
+        {%- if section.settings.badge_text != blank -%}
+          <div class="sd-hero__badge">
+            <small>{{ section.settings.badge_label | default: 'Offre du moment' }}</small>
+            <strong>{{ section.settings.badge_text }}</strong>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="sd-hero__content">
+        {%- if section.settings.pill_text != blank -%}
+          <div class="sd-hero__pill"><span class="sd-hero__dot"></span> {{ section.settings.pill_text }}</div>
+        {%- endif -%}
+        <h1 class="sd-hero__title">{{ section.settings.heading }}</h1>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="sd-hero__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+        <div class="sd-hero__buttons">
+          {%- if section.settings.button_1_text != blank -%}
+            <a href="{{ section.settings.button_1_link | default: '#' }}" class="sd-hero__btn sd-hero__btn--main">{{ section.settings.button_1_text }}</a>
+          {%- endif -%}
+          {%- if section.settings.button_2_text != blank -%}
+            <a href="{{ section.settings.button_2_link | default: '#' }}" class="sd-hero__btn sd-hero__btn--second">{{ section.settings.button_2_text }}</a>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.trust_items != blank -%}
+          <div class="sd-hero__trust">
+            {%- assign items = section.settings.trust_items | split: ',' -%}
+            {%- for item in items -%}
+              <span>{{ item | strip }}</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SouknDay – Hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image de fond" },
+    { "type": "text", "id": "pill_text", "label": "Étiquette au-dessus du titre", "default": "Marketplace marocaine · Tout en un seul endroit" },
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Trouve tout. <em>Un seul souk.</em> Livré chez toi." },
+    { "type": "textarea", "id": "subtitle", "label": "Sous-titre", "default": "Mode, maison, beauté, tech — des produits sélectionnés avec soin, à prix accessible, livrés partout au Maroc." },
+    { "type": "text", "id": "button_1_text", "label": "Bouton principal — texte", "default": "Découvrir la boutique" },
+    { "type": "url", "id": "button_1_link", "label": "Bouton principal — lien" },
+    { "type": "text", "id": "button_2_text", "label": "Bouton secondaire — texte", "default": "Meilleures ventes" },
+    { "type": "url", "id": "button_2_link", "label": "Bouton secondaire — lien" },
+    { "type": "text", "id": "badge_label", "label": "Badge — étiquette", "default": "Offre du moment" },
+    { "type": "text", "id": "badge_text", "label": "Badge — texte", "default": "Livraison gratuite dès 300 MAD" },
+    { "type": "text", "id": "trust_items", "label": "Points de confiance (séparés par une virgule)", "default": "Paiement à la livraison, Livraison rapide, Échange facile, Qualité vérifiée" }
+  ],
+  "presets": [
+    { "name": "SouknDay – Hero" }
+  ]
+}
+{% endschema %}

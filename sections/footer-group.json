@@ -1,0 +1,16 @@
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "sd_footer": {
+      "type": "sd-footer",
+      "settings": {
+        "tagline": "Marketplace marocaine multi-produits. Trouve tout, en un jour.",
+        "phone": ""
+      }
+    }
+  },
+  "order": [
+    "sd_footer"
+  ]
+}

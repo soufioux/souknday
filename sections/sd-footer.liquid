@@ -1,0 +1,77 @@
+{% comment %}
+  SouknDay — Footer (éditable : logo, tagline, téléphone, liens de politique)
+{% endcomment %}
+<style>
+  .sd-foot-{{ section.id }}, .sd-foot-{{ section.id }} * { box-sizing: border-box; }
+  .sd-foot-{{ section.id }} {
+    --sd-green: #1F6E4A; --sd-dark: #0F2E20;
+    width: 100%; padding: 34px 18px 22px; background: #ffffff; color: var(--sd-dark);
+  }
+  .sd-foot-{{ section.id }} .sd-foot__inner { max-width: 1050px; margin: 0 auto; }
+  .sd-foot-{{ section.id }} .sd-foot__top { display: grid; gap: 26px; padding-bottom: 24px; border-bottom: 1px solid rgba(15,46,32,.1); }
+  .sd-foot-{{ section.id }} .sd-foot__brand { text-align: center; }
+  .sd-foot-{{ section.id }} .sd-foot__logo { width: 150px; height: auto; margin: 0 auto; display: block; }
+  .sd-foot-{{ section.id }} .sd-foot__logo-text { font-size: 22px; font-weight: 950; color: var(--sd-green); }
+  .sd-foot-{{ section.id }} .sd-foot__tagline { max-width: 340px; margin: 12px auto 0; color: rgba(15,46,32,.6); font-size: 12.5px; line-height: 1.55; font-weight: 600; }
+  .sd-foot-{{ section.id }} .sd-foot__cols { display: grid; gap: 22px; }
+  .sd-foot-{{ section.id }} .sd-foot__title { margin: 0 0 12px; font-size: 14px; font-weight: 950; }
+  .sd-foot-{{ section.id }} .sd-foot__phone { display: inline-flex; margin-top: 9px; color: var(--sd-dark) !important; text-decoration: none !important; font-size: 12px; font-weight: 850; }
+  .sd-foot-{{ section.id }} .sd-foot__link { display: block; margin-bottom: 9px; color: rgba(15,46,32,.62) !important; text-decoration: none !important; font-size: 12px; font-weight: 700; }
+  .sd-foot-{{ section.id }} .sd-foot__bottom { padding-top: 18px; text-align: center; }
+  .sd-foot-{{ section.id }} .sd-foot__copy { margin: 4px 0 0; color: rgba(15,46,32,.42); font-size: 10.5px; font-weight: 600; }
+  @media (min-width: 750px) {
+    .sd-foot-{{ section.id }} .sd-foot__top { grid-template-columns: 1.1fr 1.4fr; gap: 44px; }
+    .sd-foot-{{ section.id }} .sd-foot__brand { text-align: left; }
+    .sd-foot-{{ section.id }} .sd-foot__logo { margin: 0; }
+    .sd-foot-{{ section.id }} .sd-foot__tagline { margin-left: 0; }
+    .sd-foot-{{ section.id }} .sd-foot__cols { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+
+<footer class="sd-foot-{{ section.id }}">
+  <div class="sd-foot__inner">
+    <div class="sd-foot__top">
+      <div class="sd-foot__brand">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 300 | image_tag: loading: 'lazy', alt: shop.name, class: 'sd-foot__logo' }}
+        {%- else -%}
+          <div class="sd-foot__logo-text">{{ shop.name }}</div>
+        {%- endif -%}
+        <p class="sd-foot__tagline">{{ section.settings.tagline | default: "Marketplace marocaine multi-produits. Trouve tout, en un jour." }}</p>
+      </div>
+      <div class="sd-foot__cols">
+        <div>
+          <h3 class="sd-foot__title">Contacte-nous</h3>
+          <p style="font-size:12px;color:rgba(15,46,32,.6);font-weight:600;">Une question ? On répond vite.</p>
+          {%- if section.settings.phone != blank -%}
+            <a class="sd-foot__phone" href="tel:{{ section.settings.phone }}">Support : {{ section.settings.phone }}</a>
+          {%- endif -%}
+        </div>
+        <div>
+          <h3 class="sd-foot__title">Liens utiles</h3>
+          <a class="sd-foot__link" href="{{ routes.root_url }}policies/terms-of-service">Conditions générales</a>
+          <a class="sd-foot__link" href="{{ routes.root_url }}policies/privacy-policy">Confidentialité</a>
+          <a class="sd-foot__link" href="{{ routes.root_url }}policies/refund-policy">Retours & échanges</a>
+        </div>
+      </div>
+    </div>
+    <div class="sd-foot__bottom">
+      <div style="font-weight:950;">{{ shop.domain }}</div>
+      <p class="sd-foot__copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "SouknDay – Footer",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "Marketplace marocaine multi-produits. Trouve tout, en un jour." },
+    { "type": "text", "id": "phone", "label": "Téléphone support" }
+  ],
+  "presets": [
+    { "name": "SouknDay – Footer" }
+  ]
+}
+{% endschema %}
