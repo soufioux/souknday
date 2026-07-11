@@ -40,9 +40,9 @@
           "type": "category",
           "settings": {
             "title": "Maison & déco",
-            "collection": "",
+            "collection": "maison-deco",
             "image": "shopify://shop_images/maison.jpg",
-            "link": "/collections/all"
+            "link": "shopify://collections/maison-deco"
           }
         },
         "cat_3": {
