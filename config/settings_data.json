@@ -1,1 +1,19 @@
+<<<<<<< HEAD
 {"current":{"logo":"shopify:\/\/shop_images\/Vente-flash-page-mbl_Plan-de-travail-1_jpg.jpg","content_for_index":[]}}
+=======
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "logo": "shopify://shop_images/Vente-flash-page-mbl_Plan-de-travail-1_jpg.jpg",
+    "content_for_index": []
+  }
+}
+>>>>>>> 171b28f4ebb75df005a16bfb153aadda2610cb4e
