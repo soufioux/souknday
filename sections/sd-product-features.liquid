@@ -1,0 +1,105 @@
+{% comment %}
+  SouknDay — Grille de caractéristiques produit (icône + titre + texte, blocs réutilisables par produit)
+{% endcomment %}
+<style>
+  .sd-feat-{{ section.id }}, .sd-feat-{{ section.id }} * { box-sizing: border-box; }
+  .sd-feat-{{ section.id }} {
+    --sd-green: #1F6E4A; --sd-orange: #F5900F; --sd-dark: #0F2E20;
+    width: 100%; padding: 30px 14px; background: #fff; font-family: Arial, Helvetica, sans-serif;
+  }
+  .sd-feat-{{ section.id }} .sd-feat__inner { max-width: 1180px; margin: 0 auto; }
+  .sd-feat-{{ section.id }} .sd-feat__head { text-align: center; margin-bottom: 20px; }
+  .sd-feat-{{ section.id }} .sd-feat__title { margin: 0; color: var(--sd-dark); font-family: Georgia, serif; font-size: 26px; font-weight: 900; }
+  .sd-feat-{{ section.id }} .sd-feat__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .sd-feat-card { padding: 14px; border-radius: 16px; background: #f6faf8; border: 1px solid rgba(15,46,32,.08); }
+  .sd-feat-card__icon { width: 34px; height: 34px; margin-bottom: 10px; border-radius: 10px; background: rgba(31,110,74,.1); color: var(--sd-green); display: inline-flex; align-items: center; justify-content: center; }
+  .sd-feat-card__icon svg { width: 18px; height: 18px; }
+  .sd-feat-card__title { margin: 0 0 4px; font-size: 13px; font-weight: 900; color: var(--sd-dark); }
+  .sd-feat-card__text { margin: 0; font-size: 11px; color: rgba(15,46,32,.55); font-weight: 600; line-height: 1.4; }
+  @media (min-width: 750px) {
+    .sd-feat-{{ section.id }} { padding: 44px 18px; }
+    .sd-feat-{{ section.id }} .sd-feat__title { font-size: 34px; }
+    .sd-feat-{{ section.id }} .sd-feat__grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .sd-feat-card { padding: 20px; }
+    .sd-feat-card__title { font-size: 15px; }
+    .sd-feat-card__text { font-size: 12.5px; }
+  }
+</style>
+
+<section class="sd-feat-{{ section.id }}">
+  <div class="sd-feat__inner">
+    {%- if section.settings.heading != blank -%}
+      <div class="sd-feat__head"><h2 class="sd-feat__title">{{ section.settings.heading }}</h2></div>
+    {%- endif -%}
+    <div class="sd-feat__grid">
+      {%- for block in section.blocks -%}
+        <div class="sd-feat-card" {{ block.shopify_attributes }}>
+          <div class="sd-feat-card__icon">
+            {%- case block.settings.icon -%}
+              {%- when 'ruler' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 15l5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="2" y="14" width="20" height="8" rx="2" transform="rotate(-45 12 18)" stroke="currentColor" stroke-width="2"/></svg>
+              {%- when 'curve' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 16c4-8 12-8 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              {%- when 'badge' -%}
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="6" stroke="currentColor" stroke-width="2"/><path d="M9 14l-2 7 5-3 5 3-2-7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              {%- when 'shape' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 18c0-6 3.5-11 8-11s8 5 8 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              {%- when 'unisex' -%}
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 12v9M8 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              {%- when 'heart' -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            {%- endcase -%}
+          </div>
+          <h3 class="sd-feat-card__title">{{ block.settings.title }}</h3>
+          <p class="sd-feat-card__text">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SouknDay – Caractéristiques produit",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titre", "default": "À propos de ce produit" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Caractéristique",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "check",
+          "options": [
+            { "value": "ruler", "label": "Ajustable / taille" },
+            { "value": "curve", "label": "Forme / courbe" },
+            { "value": "badge", "label": "Qualité / logo" },
+            { "value": "shape", "label": "Structure / silhouette" },
+            { "value": "unisex", "label": "Unisexe" },
+            { "value": "heart", "label": "Confort" },
+            { "value": "check", "label": "Générique (coche)" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Caractéristique" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Description courte de l'avantage." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SouknDay – Caractéristiques produit",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "ruler", "title": "Taille ajustable", "text": "S'adapte facilement à votre confort." } },
+        { "type": "feature", "settings": { "icon": "curve", "title": "Design soigné", "text": "Look clean et facile à porter au quotidien." } },
+        { "type": "feature", "settings": { "icon": "badge", "title": "Qualité vérifiée", "text": "Finition propre avec rendu premium." } },
+        { "type": "feature", "settings": { "icon": "shape", "title": "Structure solide", "text": "Belle tenue et silhouette moderne." } },
+        { "type": "feature", "settings": { "icon": "unisex", "title": "Style unisexe", "text": "Adapté à tous les looks." } },
+        { "type": "feature", "settings": { "icon": "heart", "title": "Confort quotidien", "text": "Pensé pour être utilisé tous les jours." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
