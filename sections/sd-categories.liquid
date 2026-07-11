@@ -21,7 +21,7 @@
   .sd-cats-{{ section.id }} .sd-cat-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(15,46,32,.09); }
   .sd-cats-{{ section.id }} .sd-cat-card__media { width: 100%; height: 130px; background: linear-gradient(180deg,#fff 0%,#f0f7f3 100%); overflow: hidden; }
   .sd-cats-{{ section.id }} .sd-cat-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .sd-cats-{{ section.id }} .sd-cat-card__placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(31,110,74,.12), rgba(245,144,15,.12)); color: var(--sd-green); font-size: 26px; font-weight: 900; }
+  .sd-cats-{{ section.id }} .sd-cat-card__placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(31,110,74,.12), rgba(245,144,15,.12)); color: var(--sd-green); }
   .sd-cats-{{ section.id }} .sd-cat-card__body { flex: 1; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
   .sd-cats-{{ section.id }} .sd-cat-card__name { margin: 0; color: var(--sd-dark); font-size: 14px; font-weight: 900; }
   .sd-cats-{{ section.id }} .sd-cat-card__cta { display: inline-flex; align-items: center; gap: 6px; color: var(--sd-green); font-size: 11px; font-weight: 950; }
@@ -68,7 +68,20 @@
                   alt: block.settings.title
               }}
             {%- else -%}
-              <div class="sd-cat-card__placeholder">{{ block.settings.title | slice: 0 }}</div>
+              {%- assign t = block.settings.title | downcase -%}
+              <div class="sd-cat-card__placeholder">
+                {%- if t contains 'mode' -%}
+                  <svg viewBox="0 0 100 100" width="52" height="52" fill="none"><path d="M30 22c0 8 9 12 20 12s20-4 20-12" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M18 34l14-10 18 8 18-8 14 10-8 12-10-4v40H36V42l-10 4-8-12z" fill="currentColor" opacity="0.9"/></svg>
+                {%- elsif t contains 'maison' -%}
+                  <svg viewBox="0 0 100 100" width="52" height="52" fill="none"><path d="M15 48L50 18l35 30" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 42v36h52V42" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><rect x="42" y="58" width="16" height="20" fill="currentColor"/></svg>
+                {%- elsif t contains 'beaut' -%}
+                  <svg viewBox="0 0 100 100" width="52" height="52" fill="none"><rect x="42" y="14" width="16" height="26" rx="6" fill="currentColor"/><path d="M38 40h24l-4 46H42l-4-46z" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><circle cx="72" cy="70" r="12" stroke="currentColor" stroke-width="4"/></svg>
+                {%- elsif t contains 'tech' -%}
+                  <svg viewBox="0 0 100 100" width="52" height="52" fill="none"><rect x="30" y="12" width="40" height="70" rx="8" stroke="currentColor" stroke-width="5"/><circle cx="50" cy="72" r="3" fill="currentColor"/><path d="M40 24h20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 100 100" width="52" height="52" fill="none"><path d="M25 35h50l-5 45H30l-5-45z" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M38 35a12 12 0 0 1 24 0" stroke="currentColor" stroke-width="5"/></svg>
+                {%- endif -%}
+              </div>
             {%- endif -%}
           </div>
           <div class="sd-cat-card__body">
