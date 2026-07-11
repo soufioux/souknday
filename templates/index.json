@@ -49,9 +49,9 @@
           "type": "category",
           "settings": {
             "title": "Beauté",
-            "collection": "",
+            "collection": "beaute",
             "image": "shopify://shop_images/beaut.jpg",
-            "link": "/collections/Beaute"
+            "link": "shopify://collections/beaute"
           }
         },
         "cat_4": {
