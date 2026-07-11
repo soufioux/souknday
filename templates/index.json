@@ -1,10 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "sd_hero_main": {
       "type": "sd-hero",
       "settings": {
         "pill_text": "Marketplace marocaine · Tout en un seul endroit",
-        "heading": "Trouve tout. <em>Un seul souk.</em> Livré chez toi.",
+        "heading": "Trouve tout. Un seul souk. Livré chez toi.",
         "subtitle": "Mode, maison, beauté, tech — des produits sélectionnés avec soin, à prix accessible, livrés partout au Maroc.",
         "button_1_text": "Découvrir la boutique",
         "button_1_link": "/collections/all",
@@ -18,41 +27,45 @@
     "sd_categories_main": {
       "type": "sd-categories",
       "blocks": {
-        "cat_1": {
+        "category_yJr8MA": {
           "type": "category",
           "settings": {
-            "title": "Mode",
-            "collection": "",
-            "link": "/collections/all"
+            "title": "Auto moto",
+            "collection": "auto-moto",
+            "image": "shopify://shop_images/output_image_53.webp",
+            "link": "shopify://collections/auto-moto"
           }
         },
         "cat_2": {
           "type": "category",
           "settings": {
             "title": "Maison & déco",
-            "collection": "",
-            "link": "/collections/all"
+            "collection": "maison-deco",
+            "image": "shopify://shop_images/maison.jpg",
+            "link": "shopify://collections/maison-deco"
           }
         },
         "cat_3": {
           "type": "category",
           "settings": {
             "title": "Beauté",
-            "collection": "",
-            "link": "/collections/all"
+            "collection": "beaute",
+            "image": "shopify://shop_images/beaut.jpg",
+            "link": "shopify://collections/beaute"
           }
         },
         "cat_4": {
           "type": "category",
           "settings": {
             "title": "Tech & accessoires",
-            "collection": "",
-            "link": "/collections/all"
+            "collection": "tech-accessoires",
+            "image": "shopify://shop_images/output_image_51.webp",
+            "link": "shopify://collections/tech-accessoires"
           }
         }
       },
       "block_order": [
-        "cat_1",
+        "category_yJr8MA",
         "cat_2",
         "cat_3",
         "cat_4"
