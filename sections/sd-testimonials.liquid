@@ -1,0 +1,93 @@
+{% comment %}
+  SouknDay — Témoignages (blocs éditables : note, texte, nom)
+{% endcomment %}
+<style>
+  .sd-test-{{ section.id }}, .sd-test-{{ section.id }} * { box-sizing: border-box; }
+  .sd-test-{{ section.id }} {
+    --sd-green: #1F6E4A; --sd-orange: #F5900F; --sd-dark: #0F2E20; --sd-gold: #F4C400;
+    width: 100%; padding: 44px 14px 48px;
+    background: linear-gradient(180deg, var(--sd-dark) 0%, #14261c 55%, var(--sd-dark) 100%);
+    font-family: Arial, Helvetica, sans-serif; color: #fff;
+  }
+  .sd-test-{{ section.id }} .sd-test__inner { max-width: 1180px; margin: 0 auto; }
+  .sd-test-{{ section.id }} .sd-test__head { text-align: center; margin-bottom: 20px; }
+  .sd-test-{{ section.id }} .sd-test__title { margin: 0; font-family: Georgia, serif; font-size: 32px; font-weight: 900; }
+  .sd-test-{{ section.id }} .sd-test__subtitle { max-width: 440px; margin: 12px auto 0; color: rgba(255,255,255,.65); font-size: 13px; line-height: 1.55; font-weight: 600; }
+  .sd-test-{{ section.id }} .sd-test__grid { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2px 4px 10px; scrollbar-width: none; }
+  .sd-test-{{ section.id }} .sd-test__grid::-webkit-scrollbar { display: none; }
+  .sd-test-{{ section.id }} .sd-review-card { flex: 0 0 82%; scroll-snap-align: center; min-height: 170px; padding: 20px 16px; border-radius: 22px; background: #fff; color: var(--sd-dark); text-align: center; }
+  .sd-test-{{ section.id }} .sd-review-card__stars { color: var(--sd-gold); font-size: 18px; margin-bottom: 12px; }
+  .sd-test-{{ section.id }} .sd-review-card__text { margin: 0; font-size: 13px; line-height: 1.6; font-weight: 700; }
+  .sd-test-{{ section.id }} .sd-review-card__name { margin-top: 16px; font-size: 12px; font-weight: 800; font-style: italic; color: var(--sd-green); }
+  .sd-test-{{ section.id }} .sd-test__trust { margin-top: 18px; padding: 13px 14px; border-radius: 20px; background: rgba(255,255,255,.06); display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .sd-test-{{ section.id }} .sd-test__trust-item { text-align: center; color: rgba(255,255,255,.7); font-size: 10px; font-weight: 700; }
+  .sd-test-{{ section.id }} .sd-test__trust-item strong { display: block; font-size: 14px; color: #fff; }
+  @media (min-width: 750px) {
+    .sd-test-{{ section.id }} { padding: 60px 18px 68px; }
+    .sd-test-{{ section.id }} .sd-test__title { font-size: 48px; }
+    .sd-test-{{ section.id }} .sd-test__grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; overflow: visible; }
+    .sd-test-{{ section.id }} .sd-review-card { min-height: 200px; }
+  }
+</style>
+<section class="sd-test-{{ section.id }}">
+  <div class="sd-test__inner">
+    <div class="sd-test__head">
+      <h2 class="sd-test__title">{{ section.settings.heading | default: 'Témoignages' }}</h2>
+      {%- if section.settings.subtitle != blank -%}<p class="sd-test__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </div>
+    <div class="sd-test__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'review' -%}
+          <article class="sd-review-card" {{ block.shopify_attributes }}>
+            <div class="sd-review-card__stars">{% for i in (1..5) %}{% if i <= block.settings.rating %}★{% else %}☆{% endif %}{% endfor %}</div>
+            <p class="sd-review-card__text">{{ block.settings.text }}</p>
+            <div class="sd-review-card__name">{{ block.settings.author }}</div>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.show_trust -%}
+    <div class="sd-test__trust">
+      <div class="sd-test__trust-item"><strong>{{ section.settings.trust_rating | default: '4.8/5' }}</strong>Note moyenne</div>
+      <div class="sd-test__trust-item"><strong>{{ section.settings.trust_customers | default: '+5k' }}</strong>Clients satisfaits</div>
+      <div class="sd-test__trust-item"><strong>{{ section.settings.trust_delivery | default: '24-72h' }}</strong>Livraison</div>
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SouknDay – Témoignages",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Témoignages" },
+    { "type": "textarea", "id": "subtitle", "label": "Sous-titre", "default": "Vos avis comptent énormément pour nous." },
+    { "type": "checkbox", "id": "show_trust", "label": "Afficher la barre de confiance", "default": true },
+    { "type": "text", "id": "trust_rating", "label": "Note moyenne", "default": "4.8/5" },
+    { "type": "text", "id": "trust_customers", "label": "Nombre de clients", "default": "+5k" },
+    { "type": "text", "id": "trust_delivery", "label": "Délai de livraison", "default": "24-72h" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Note", "min": 1, "max": 5, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Texte de l'avis", "default": "Très satisfait, produit conforme et livraison rapide." },
+        { "type": "text", "id": "author", "label": "Nom du client", "default": "Amine" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SouknDay – Témoignages",
+      "blocks": [
+        { "type": "review", "settings": { "rating": 5, "text": "Commande reçue rapidement, produit conforme aux photos. Je recommande !", "author": "Amine" } },
+        { "type": "review", "settings": { "rating": 5, "text": "Service client très réactif, livraison rapide sur Casablanca.", "author": "Salma" } },
+        { "type": "review", "settings": { "rating": 5, "text": "Bon rapport qualité prix, j'ai déjà commandé 3 fois.", "author": "Youssef" } },
+        { "type": "review", "settings": { "rating": 5, "text": "Le paiement à la livraison m'a rassuré pour ma première commande.", "author": "Imane" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

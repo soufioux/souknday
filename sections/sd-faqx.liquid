@@ -1,0 +1,126 @@
+{% comment %}
+  SouknDay — FAQ (blocs éditables, icône + question + réponse)
+{% endcomment %}
+<style>
+  .sd-faqx-{{ section.id }}, .sd-faqx-{{ section.id }} * { box-sizing: border-box; }
+  .sd-faqx-{{ section.id }} {
+    --sd-green: #1F6E4A; --sd-orange: #F5900F; --sd-dark: #0F2E20;
+    width: 100%; padding: 42px 14px 48px;
+    background: linear-gradient(180deg, #ffffff 0%, #f6faf8 52%, #eef8f2 100%);
+    font-family: Arial, Helvetica, sans-serif; color: var(--sd-dark);
+  }
+  .sd-faqx-{{ section.id }} .sd-faqx__inner { max-width: 1180px; margin: 0 auto; }
+  .sd-faqx-{{ section.id }} .sd-faqx__head { text-align: center; margin-bottom: 22px; }
+  .sd-faqx-{{ section.id }} .sd-faqx__title { margin: 0; font-family: Georgia, serif; font-size: 34px; font-weight: 900; }
+  .sd-faqx-{{ section.id }} .sd-faqx__subtitle { max-width: 480px; margin: 13px auto 0; color: rgba(15,46,32,.6); font-size: 13px; line-height: 1.55; font-weight: 600; }
+  .sd-faqx-{{ section.id }} .sd-faqx__list { display: grid; gap: 11px; }
+  .sd-faqx-{{ section.id }} .sd-faqx-item { overflow: hidden; border-radius: 20px; background: #fff; border: 1px solid rgba(15,46,32,.08); }
+  .sd-faqx-{{ section.id }} .sd-faqx-item summary { list-style: none; cursor: pointer; padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; font-size: 13.5px; font-weight: 900; }
+  .sd-faqx-{{ section.id }} .sd-faqx-item summary::-webkit-details-marker { display: none; }
+  .sd-faqx-{{ section.id }} .sd-faqx-item__left { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .sd-faqx-{{ section.id }} .sd-faqx-item__icon { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 12px; background: rgba(31,110,74,.1); color: var(--sd-green); display: inline-flex; align-items: center; justify-content: center; }
+  .sd-faqx-{{ section.id }} .sd-faqx-item__icon svg { width: 17px; height: 17px; }
+  .sd-faqx-{{ section.id }} .sd-faqx-item__plus { position: relative; width: 26px; height: 26px; flex: 0 0 auto; border-radius: 999px; background: rgba(31,110,74,.08); }
+  .sd-faqx-{{ section.id }} .sd-faqx-item__plus::before, .sd-faqx-{{ section.id }} .sd-faqx-item__plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 11px; height: 2px; background: var(--sd-green); transform: translate(-50%,-50%); }
+  .sd-faqx-{{ section.id }} .sd-faqx-item__plus::after { transform: translate(-50%,-50%) rotate(90deg); transition: transform .18s ease; }
+  .sd-faqx-{{ section.id }} .sd-faqx-item[open] .sd-faqx-item__plus::after { transform: translate(-50%,-50%) rotate(0deg); }
+  .sd-faqx-{{ section.id }} .sd-faqx-item__content { padding: 0 16px 17px 59px; color: rgba(15,46,32,.55); font-size: 12px; line-height: 1.6; font-weight: 600; }
+  @media (min-width: 750px) {
+    .sd-faqx-{{ section.id }} { padding: 64px 18px 72px; }
+    .sd-faqx-{{ section.id }} .sd-faqx__title { font-size: 52px; }
+    .sd-faqx-{{ section.id }} .sd-faqx__list { max-width: 900px; margin: 0 auto; grid-template-columns: repeat(2,1fr); gap: 14px; }
+  }
+</style>
+<section class="sd-faqx-{{ section.id }}">
+  <div class="sd-faqx__inner">
+    <div class="sd-faqx__head">
+      <h2 class="sd-faqx__title">{{ section.settings.heading | default: 'FAQ' }}</h2>
+      {%- if section.settings.subtitle != blank -%}<p class="sd-faqx__subtitle">{{ section.settings.subtitle }}</p>{%- endif -%}
+    </div>
+    <div class="sd-faqx__list">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'question' -%}
+          <details class="sd-faqx-item" {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
+            <summary>
+              <span class="sd-faqx-item__left">
+                <span class="sd-faqx-item__icon">
+                  {%- case block.settings.icon -%}
+                    {%- when 'truck' -%}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h11v9H3z" stroke="currentColor" stroke-width="2"/><path d="M14 10h4l3 3v3h-7z" stroke="currentColor" stroke-width="2"/><circle cx="7" cy="18" r="1.8" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="1.8" stroke="currentColor" stroke-width="2"/></svg>
+                    {%- when 'box' -%}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M21 8l-9-5-9 5 9 5 9-5z" stroke="currentColor" stroke-width="2"/><path d="M3 8v8l9 5 9-5V8" stroke="currentColor" stroke-width="2"/><path d="M12 13v8" stroke="currentColor" stroke-width="2"/></svg>
+                    {%- when 'card' -%}
+                      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 10h18" stroke="currentColor" stroke-width="2"/></svg>
+                    {%- when 'shield' -%}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 4v5c0 5-3.2 8-7 9-3.8-1-7-4-7-9V7z" stroke="currentColor" stroke-width="2"/><path d="M8.5 12.2l2.2 2.2 4.8-5" stroke="currentColor" stroke-width="2"/></svg>
+                    {%- when 'exchange' -%}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h11a4 4 0 0 1 0 8H8" stroke="currentColor" stroke-width="2"/><path d="M8 11l-4 4 4 4" stroke="currentColor" stroke-width="2"/></svg>
+                    {%- else -%}
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16v10H4z" stroke="currentColor" stroke-width="2"/><path d="M7 11h10" stroke="currentColor" stroke-width="2"/><path d="M7 15h6" stroke="currentColor" stroke-width="2"/></svg>
+                  {%- endcase -%}
+                </span>
+                {{ block.settings.question }}
+              </span>
+              <span class="sd-faqx-item__plus"></span>
+            </summary>
+            <div class="sd-faqx-item__content">{{ block.settings.answer }}</div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".sd-faqx-{{ section.id }} .sd-faqx-item").forEach(function (item) {
+    item.addEventListener("toggle", function () {
+      if (item.open) {
+        document.querySelectorAll(".sd-faqx-{{ section.id }} .sd-faqx-item").forEach(function (o) { if (o !== item) o.open = false; });
+      }
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "SouknDay – FAQ",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titre", "default": "FAQ" },
+    { "type": "textarea", "id": "subtitle", "label": "Sous-titre", "default": "Les réponses à vos questions sur les commandes et la livraison." }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icône", "default": "box",
+          "options": [
+            { "value": "box", "label": "Colis" },
+            { "value": "truck", "label": "Livraison" },
+            { "value": "card", "label": "Paiement" },
+            { "value": "shield", "label": "Garantie" },
+            { "value": "exchange", "label": "Échange" }
+          ]
+        },
+        { "type": "text", "id": "question", "label": "Question", "default": "Quels sont les délais de livraison ?" },
+        { "type": "textarea", "id": "answer", "label": "Réponse", "default": "Entre 24h et 72h ouvrables selon votre ville." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SouknDay – FAQ",
+      "blocks": [
+        { "type": "question", "settings": { "icon": "box", "question": "Quand est expédiée ma commande ?", "answer": "Une fois validée, elle est préparée et expédiée rapidement." } },
+        { "type": "question", "settings": { "icon": "truck", "question": "Quels sont les délais de livraison ?", "answer": "Entre 24h et 72h ouvrables selon votre ville." } },
+        { "type": "question", "settings": { "icon": "card", "question": "Le paiement à la livraison est-il disponible ?", "answer": "Oui, vous payez uniquement à la réception de votre commande." } },
+        { "type": "question", "settings": { "icon": "exchange", "question": "Comment fonctionne un retour ?", "answer": "Contactez notre service client sous 3 jours ouvrables avec photos à l'appui." } },
+        { "type": "question", "settings": { "icon": "shield", "question": "Y a-t-il une garantie ?", "answer": "Oui, garantie de 7 jours contre les défauts de fabrication." } },
+        { "type": "question", "settings": { "icon": "box", "question": "Livrez-vous partout au Maroc ?", "answer": "Oui, dans toutes les grandes villes et la majorité des régions." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
