@@ -465,7 +465,7 @@
         "tier_1": {
           "type": "tier",
           "settings": {
-            "label": "1 article",
+            "label": "Pack simple",
             "quantity": 1,
             "price": 179
           }
@@ -473,9 +473,10 @@
         "tier_2": {
           "type": "tier",
           "settings": {
-            "label": "2 articles (-30%)",
+            "label": "Pack duo",
             "quantity": 2,
-            "price": 249
+            "price": 249,
+            "badge": "Le plus choisi"
           }
         }
       },
@@ -484,7 +485,7 @@
         "tier_2"
       ],
       "settings": {
-        "heading": "Commande rapide — Paiement à la livraison",
+        "heading": "Composez votre pack",
         "products_title": "Choisis tes articles",
         "button_text": "Commander maintenant",
         "thank_you_url": "/pages/merci",

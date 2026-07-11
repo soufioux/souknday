@@ -1,0 +1,64 @@
+{% comment %}
+  SouknDay — Bandeau défilant (ticker) type "+X clients satisfaits"
+{% endcomment %}
+<style>
+  .sd-ticker-{{ section.id }} {
+    --sd-green: #1F6E4A; --sd-orange: #F5900F;
+    width: 100%; overflow: hidden; padding: 12px 0;
+    background: {{ section.settings.background_color | default: '#1F6E4A' }};
+  }
+  .sd-ticker-{{ section.id }} .sd-ticker__track {
+    display: flex; width: max-content;
+    animation: sd-ticker-scroll-{{ section.id }} {{ section.settings.speed | default: 28 }}s linear infinite;
+  }
+  .sd-ticker-{{ section.id }} .sd-ticker__item {
+    flex: 0 0 auto; padding: 0 2.2rem; color: #fff; font-size: 15px; font-weight: 800;
+    white-space: nowrap; font-family: Arial, Helvetica, sans-serif;
+  }
+  @keyframes sd-ticker-scroll-{{ section.id }} {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sd-ticker-{{ section.id }} .sd-ticker__track { animation: none; }
+  }
+</style>
+<div class="sd-ticker-{{ section.id }}">
+  <div class="sd-ticker__track">
+    {%- assign loop_count = 10 -%}
+    {%- for i in (1..loop_count) -%}
+      {%- for block in section.blocks -%}
+        <span class="sd-ticker__item">{{ block.settings.text }}</span>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SouknDay – Bandeau défilant",
+  "settings": [
+    { "type": "color", "id": "background_color", "label": "Couleur de fond", "default": "#1F6E4A" },
+    { "type": "range", "id": "speed", "label": "Vitesse (secondes par boucle)", "min": 10, "max": 60, "step": 2, "default": 28 }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte", "default": "+1000 clients satisfaits" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SouknDay – Bandeau défilant",
+      "blocks": [
+        { "type": "message", "settings": { "text": "+1000 clients satisfaits" } },
+        { "type": "message", "settings": { "text": "Livraison partout au Maroc" } },
+        { "type": "message", "settings": { "text": "Paiement à la livraison" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,19 +1,10 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "sd_hero_main": {
       "type": "sd-hero",
       "settings": {
         "pill_text": "Marketplace marocaine · Tout en un seul endroit",
-        "heading": "Trouve tout. Un seul souk. Livré chez toi.",
+        "heading": "Trouve tout. <em>Un seul souk.</em> Livré chez toi.",
         "subtitle": "Mode, maison, beauté, tech — des produits sélectionnés avec soin, à prix accessible, livrés partout au Maroc.",
         "button_1_text": "Découvrir la boutique",
         "button_1_link": "/collections/all",
@@ -27,45 +18,41 @@
     "sd_categories_main": {
       "type": "sd-categories",
       "blocks": {
-        "category_yJr8MA": {
+        "cat_1": {
           "type": "category",
           "settings": {
-            "title": "Auto moto",
-            "collection": "auto-moto",
-            "image": "shopify://shop_images/output_image_53.webp",
-            "link": "shopify://collections/auto-moto"
+            "title": "Mode",
+            "collection": "",
+            "link": "/collections/all"
           }
         },
         "cat_2": {
           "type": "category",
           "settings": {
             "title": "Maison & déco",
-            "collection": "maison-deco",
-            "image": "shopify://shop_images/maison.jpg",
-            "link": "shopify://collections/maison-deco"
+            "collection": "",
+            "link": "/collections/all"
           }
         },
         "cat_3": {
           "type": "category",
           "settings": {
             "title": "Beauté",
-            "collection": "beaute",
-            "image": "shopify://shop_images/beaut.jpg",
-            "link": "shopify://collections/beaute"
+            "collection": "",
+            "link": "/collections/all"
           }
         },
         "cat_4": {
           "type": "category",
           "settings": {
             "title": "Tech & accessoires",
-            "collection": "tech-accessoires",
-            "image": "shopify://shop_images/output_image_51.webp",
-            "link": "shopify://collections/tech-accessoires"
+            "collection": "",
+            "link": "/collections/all"
           }
         }
       },
       "block_order": [
-        "category_yJr8MA",
+        "cat_1",
         "cat_2",
         "cat_3",
         "cat_4"
@@ -295,10 +282,43 @@
         "padding-block-start": 0,
         "padding-block-end": 0
       }
+    },
+    "sd_ticker_main": {
+      "type": "sd-ticker",
+      "blocks": {
+        "msg_1": {
+          "type": "message",
+          "settings": {
+            "text": "+1000 clients satisfaits"
+          }
+        },
+        "msg_2": {
+          "type": "message",
+          "settings": {
+            "text": "Livraison partout au Maroc"
+          }
+        },
+        "msg_3": {
+          "type": "message",
+          "settings": {
+            "text": "Paiement à la livraison"
+          }
+        }
+      },
+      "block_order": [
+        "msg_1",
+        "msg_2",
+        "msg_3"
+      ],
+      "settings": {
+        "background_color": "#1F6E4A",
+        "speed": 28
+      }
     }
   },
   "order": [
     "sd_hero_main",
+    "sd_ticker_main",
     "sd_categories_main",
     "product_list_fa6P9H",
     "sd_why_us",
