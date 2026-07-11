@@ -71,7 +71,17 @@
   .sd-order-{{ section.id }} .sd-order__recap { background: #fff; border: 2px solid var(--sd-green); border-radius: 10px; padding: 12px; margin-bottom: 12px; font-weight: 800; color: var(--sd-dark); display: none; font-size: 14px; }
   .sd-order-{{ section.id }} .sd-order__recap.active { display: block; }
   .sd-order-{{ section.id }} .sd-order__recap div { margin: 4px 0; display: flex; justify-content: space-between; }
-  .sd-order-{{ section.id }} .sd-order__checkbox { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: var(--sd-green); }
+  .sd-order-{{ section.id }} .sd-order__progress { width: 100%; height: 7px; border-radius: 999px; background: rgba(31,110,74,.10); overflow: hidden; margin: 10px 0; }
+  .sd-order-{{ section.id }} .sd-order__progress-bar { display: block; width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--sd-green), var(--sd-orange)); transition: width .25s ease; }
+  .sd-order-{{ section.id }} .sd-order__preview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+  .sd-order-{{ section.id }} .sd-order__preview-empty { grid-column: 1 / -1; padding: 12px; border-radius: 14px; background: var(--sd-cream); border: 1px dashed rgba(31,110,74,.25); text-align: center; font-size: 11px; font-weight: 700; color: rgba(15,46,32,.55); }
+  .sd-order-{{ section.id }} .sd-order__chip { position: relative; height: 62px; border-radius: 14px; background: #fff; border: 1.5px solid rgba(31,110,74,.14); overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 14px rgba(15,46,32,.07); }
+  .sd-order-{{ section.id }} .sd-order__chip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sd-order-{{ section.id }} .sd-order__chip-num { position: absolute; top: 4px; left: 4px; width: 17px; height: 17px; border-radius: 999px; background: var(--sd-green); color: #fff; font-size: 9px; font-weight: 900; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; z-index: 2; }
+  .sd-order-{{ section.id }} .sd-order__chip--free { border-color: var(--sd-orange); box-shadow: 0 0 0 3px rgba(245,144,15,.35); }
+  .sd-order-{{ section.id }} .sd-order__chip--free::after { content: "OFFERT"; position: absolute; right: 3px; bottom: 3px; background: var(--sd-orange); color: #fff; font-size: 7px; font-weight: 900; padding: 2px 4px; border-radius: 999px; z-index: 2; }
+  .sd-order-{{ section.id }} .sd-order__chip--free .sd-order__chip-num { background: var(--sd-orange); }
+  .sd-order-{{ section.id }} .sd-order__free-note { grid-column: 1 / -1; padding: 8px 10px; border-radius: 12px; background: rgba(245,144,15,.12); border: 1px solid rgba(245,144,15,.28); text-align: center; font-size: 11px; font-weight: 800; color: var(--sd-orange); }
   .sd-order-{{ section.id }} .sd-order__submit {
     background: var(--sd-orange); color: #fff; padding: 13px; border: none; border-radius: 10px; cursor: pointer;
     font-size: 15px; font-weight: 900; width: 100%; display: flex; align-items: center; justify-content: center;
@@ -111,9 +121,9 @@
       <div class="sd-order__grid" data-collection="{{ section.settings.collection.handle | default: 'all' }}"></div>
     </div>
 
-    <div class="sd-order__checkbox">
-      <input type="checkbox" id="sd-confirm-{{ section.id }}">
-      <label for="sd-confirm-{{ section.id }}">Je confirme ma sélection</label>
+    <div class="sd-order__progress"><span class="sd-order__progress-bar"></span></div>
+    <div class="sd-order__preview">
+      <div class="sd-order__preview-empty">Aucun article sélectionné pour le moment.</div>
     </div>
 
     <form class="sd-order__form" id="sd-order-form-{{ section.id }}">
@@ -188,6 +198,8 @@
   var statusEl = root.querySelector('.sd-order__status');
   var grid = root.querySelector('.sd-order__grid');
   var recap = root.querySelector('.sd-order__recap');
+  var progressBar = root.querySelector('.sd-order__progress-bar');
+  var previewEl = root.querySelector('.sd-order__preview');
   var form = root.querySelector('form');
 
   function setTier(btn) {
@@ -199,16 +211,35 @@
     form.querySelector('[name="coupon"]').value = "";
 
     tierButtons.forEach(function (b) { b.classList.toggle('selected', b === btn); });
-    updateStatus(); updateRecap();
+    updateStatus(); updateRecap(); updatePreview();
   }
 
   function updateStatus() {
     if (required > 0) {
       statusEl.textContent = selectedProducts.length + '/' + required;
       statusEl.classList.add('active');
+      progressBar.style.width = Math.min((selectedProducts.length / required) * 100, 100) + '%';
     } else {
       statusEl.classList.remove('active');
+      progressBar.style.width = '0%';
     }
+  }
+
+  function updatePreview() {
+    if (!selectedProducts.length) {
+      previewEl.innerHTML = '<div class="sd-order__preview-empty">Aucun article sélectionné pour le moment.</div>';
+      return;
+    }
+    var html = selectedProducts.map(function (p, i) {
+      var isFree = required === 4 && i === 3;
+      return '<div class="sd-order__chip' + (isFree ? ' sd-order__chip--free' : '') + '">' +
+             '<span class="sd-order__chip-num">' + (i + 1) + '</span>' +
+             '<img src="' + p.image + '" alt="' + p.title.replace(/"/g, '&quot;') + '"></div>';
+    }).join('');
+    if (required === 4 && selectedProducts.length >= 4) {
+      html += '<div class="sd-order__free-note">🎁 Le dernier article est offert</div>';
+    }
+    previewEl.innerHTML = html;
   }
 
   function updateRecap() {
@@ -226,7 +257,7 @@
     recap.querySelector('.sd-order__recap-total').textContent = total + ' MAD';
     form.querySelector('.sd-order__offer-label').value = offerLabel;
     form.querySelector('.sd-order__offer-price').value = total;
-    form.querySelector('.sd-order__products-field').value = selectedProducts.join('; ');
+    form.querySelector('.sd-order__products-field').value = selectedProducts.map(function (p) { return p.detail; }).join('; ');
   }
 
   tierButtons.forEach(function (btn) { btn.addEventListener('click', function () { setTier(btn); }); });
@@ -241,7 +272,7 @@
           var outOfStock = p.variants.every(function (v) { return !v.available; });
           var img = p.images.length ? p.images[0].src : '';
           var detail = p.title + ' (ID:' + p.id + ')';
-          return '<div class="sd-order__item' + (outOfStock ? ' out-of-stock' : '') + '" data-detail="' + detail.replace(/"/g, '&quot;') + '">' +
+          return '<div class="sd-order__item' + (outOfStock ? ' out-of-stock' : '') + '" data-detail="' + detail.replace(/"/g, '&quot;') + '" data-title="' + p.title.replace(/"/g, '&quot;') + '" data-image="' + img + '">' +
                  '<img src="' + img + '" alt="' + p.title.replace(/"/g, '&quot;') + '" loading="lazy"></div>';
         }).join('');
         grid.querySelectorAll('.sd-order__item:not(.out-of-stock)').forEach(function (item) {
@@ -253,18 +284,18 @@
 
   function toggleProduct(item) {
     var detail = item.dataset.detail;
-    var idx = selectedProducts.indexOf(detail);
+    var idx = selectedProducts.findIndex(function (p) { return p.detail === detail; });
     if (idx > -1) {
       selectedProducts.splice(idx, 1);
       item.classList.remove('selected');
     } else if (selectedProducts.length < required) {
-      selectedProducts.push(detail);
+      selectedProducts.push({ detail: detail, title: item.dataset.title, image: item.dataset.image });
       item.classList.add('selected');
     } else {
       alert('Tu peux choisir ' + required + ' article(s) maximum.');
       return;
     }
-    updateStatus(); updateRecap();
+    updateStatus(); updateRecap(); updatePreview();
   }
 
   root.querySelector('.sd-order__apply-coupon').addEventListener('click', function () {
@@ -290,7 +321,6 @@
     e.preventDefault();
     if (!offerLabel) { alert('Choisis une offre.'); return; }
     if (selectedProducts.length !== required) { alert('Choisis ' + required + ' article(s).'); return; }
-    if (!document.getElementById('sd-confirm-' + sectionId).checked) { alert('Confirme ta sélection avant de commander.'); return; }
 
     var btn = root.querySelector('.sd-order__submit');
     var spinner = root.querySelector('.sd-order__spinner');
