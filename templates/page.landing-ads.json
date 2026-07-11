@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "sd_order_landing": {
+      "type": "sd-order-form",
+      "blocks": {
+        "tier_1": {
+          "type": "tier",
+          "settings": { "label": "1 article", "quantity": 1, "price": 179 }
+        },
+        "tier_2": {
+          "type": "tier",
+          "settings": { "label": "2 articles (-30%)", "quantity": 2, "price": 249 }
+        }
+      },
+      "block_order": ["tier_1", "tier_2"],
+      "settings": {
+        "heading": "Choisis ton offre SouknDay",
+        "products_title": "Choisis tes articles",
+        "button_text": "Commander maintenant",
+        "thank_you_url": "/pages/merci",
+        "utm_source": "facebook_ads"
+      }
+    }
+  },
+  "order": ["sd_order_landing"]
+}

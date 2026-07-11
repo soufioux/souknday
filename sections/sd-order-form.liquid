@@ -1,0 +1,344 @@
+{% comment %}
+  SouknDay — Page de commande COD pour landing pages publicitaires (Facebook/TikTok/Insta ads)
+  Formulaire : nom, prénom, téléphone, adresse, ville — sans passer par le checkout Shopify natif.
+{% endcomment %}
+<style>
+  .sd-order-{{ section.id }}, .sd-order-{{ section.id }} * { box-sizing: border-box; }
+  .sd-order-{{ section.id }} {
+    --sd-green: #1F6E4A; --sd-orange: #F5900F; --sd-dark: #0F2E20; --sd-cream: #FCEFE3;
+    width: 100%; max-width: 480px; margin: 20px auto; font-family: Arial, Helvetica, sans-serif;
+  }
+  .sd-order-{{ section.id }} .sd-order__box {
+    padding: 20px; border-radius: 18px; border: 2px solid var(--sd-green);
+    box-shadow: 0 8px 20px rgba(15,46,32,.1); background: #fff;
+  }
+  .sd-order-{{ section.id }} .sd-order__title { font-size: clamp(19px,5.5vw,25px); font-weight: 900; color: var(--sd-dark); text-align: center; margin: 0 0 12px; }
+  .sd-order-{{ section.id }} .sd-order__tiers { display: flex; justify-content: center; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
+  .sd-order-{{ section.id }} .sd-order__tier-btn {
+    background: transparent; color: var(--sd-dark); padding: 10px 16px; border: 2px solid var(--sd-green);
+    border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 800; transition: all .2s ease;
+  }
+  .sd-order-{{ section.id }} .sd-order__tier-btn.selected { background: var(--sd-green); color: #fff; }
+  .sd-order-{{ section.id }} .sd-order__price {
+    color: #fff; background: var(--sd-orange); font-size: 22px; font-weight: 900; text-align: center;
+    max-width: 160px; margin: 10px auto; padding: 8px; border-radius: 10px; display: none;
+  }
+  .sd-order-{{ section.id }} .sd-order__price.active { display: block; }
+  .sd-order-{{ section.id }} .sd-order__hint { text-align: center; font-size: 12.5px; color: rgba(15,46,32,.55); font-weight: 700; margin: 8px 0; }
+  .sd-order-{{ section.id }} .sd-order__status {
+    color: #fff; font-size: 20px; font-weight: 900; text-align: center; padding: 7px 0;
+    margin: 14px auto -18px; max-width: 90px; background: var(--sd-green); border-radius: 8px 8px 0 0; display: none;
+  }
+  .sd-order-{{ section.id }} .sd-order__status.active { display: block; }
+  .sd-order-{{ section.id }} .sd-order__products {
+    max-width: 100%; background: linear-gradient(135deg, var(--sd-cream), #fff); padding: 16px 12px 12px;
+    margin-top: 18px; border-radius: 14px; max-height: 300px; overflow-y: auto; border: 3px solid var(--sd-green);
+  }
+  .sd-order-{{ section.id }} .sd-order__cat-title { font-size: 15px; font-weight: 900; color: var(--sd-dark); text-align: center; margin: 0 0 8px; }
+  .sd-order-{{ section.id }} .sd-order__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; justify-items: center; padding-bottom: 8px; }
+  .sd-order-{{ section.id }} .sd-order__item {
+    display: flex; align-items: center; justify-content: center; height: 88px; width: 88px; border: 3px solid #ddd;
+    border-radius: 12px; cursor: pointer; background: #fff; position: relative; overflow: hidden;
+  }
+  .sd-order-{{ section.id }} .sd-order__item img { width: 100%; height: 100%; object-fit: cover; }
+  .sd-order-{{ section.id }} .sd-order__item.selected { border-color: var(--sd-orange); border-width: 4px; }
+  .sd-order-{{ section.id }} .sd-order__item.out-of-stock { opacity: .5; pointer-events: none; }
+  .sd-order-{{ section.id }} .sd-order__item.out-of-stock::after { content: "Épuisé"; position: absolute; bottom: 4px; background: #c0392b; color: #fff; font-size: 8px; font-weight: 900; padding: 1px 4px; border-radius: 2px; }
+  .sd-order-{{ section.id }} .sd-order__form {
+    margin-top: 14px; background: linear-gradient(135deg, var(--sd-cream), #fff); padding: 16px; border-radius: 14px;
+    border: 3px solid var(--sd-green);
+  }
+  .sd-order-{{ section.id }} .sd-order__form-title { font-size: 17px; font-weight: 900; color: var(--sd-dark); margin-bottom: 12px; text-align: center; }
+  .sd-order-{{ section.id }} .sd-order__form input, .sd-order-{{ section.id }} .sd-order__form select {
+    width: 100%; padding: 11px 12px; margin-bottom: 12px; border: 2px solid #ccc; border-radius: 10px;
+    font-size: 15px; text-align: center; font-family: inherit;
+  }
+  .sd-order-{{ section.id }} .sd-order__form input.invalid { border-color: #c0392b !important; }
+  .sd-order-{{ section.id }} .sd-order__coupon { display: flex; gap: 8px; margin-bottom: 12px; }
+  .sd-order-{{ section.id }} .sd-order__coupon input { flex: 1; margin-bottom: 0; }
+  .sd-order-{{ section.id }} .sd-order__coupon button { background: var(--sd-green); color: #fff; border: none; border-radius: 10px; padding: 0 14px; font-weight: 900; cursor: pointer; }
+  .sd-order-{{ section.id }} .sd-order__recap { background: #fff; border: 2px solid var(--sd-green); border-radius: 10px; padding: 12px; margin-bottom: 12px; font-weight: 800; color: var(--sd-dark); display: none; font-size: 14px; }
+  .sd-order-{{ section.id }} .sd-order__recap.active { display: block; }
+  .sd-order-{{ section.id }} .sd-order__recap div { margin: 4px 0; display: flex; justify-content: space-between; }
+  .sd-order-{{ section.id }} .sd-order__checkbox { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: var(--sd-green); }
+  .sd-order-{{ section.id }} .sd-order__submit {
+    background: var(--sd-orange); color: #fff; padding: 13px; border: none; border-radius: 10px; cursor: pointer;
+    font-size: 15px; font-weight: 900; width: 100%; display: flex; align-items: center; justify-content: center;
+    gap: 8px; transition: transform .2s ease;
+  }
+  .sd-order-{{ section.id }} .sd-order__submit:hover { transform: translateY(-1px); }
+  .sd-order-{{ section.id }} .sd-order__submit:disabled { opacity: .7; cursor: not-allowed; }
+  .sd-order-{{ section.id }} .sd-order__spinner {
+    width: 16px; height: 16px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%;
+    animation: sd-spin-{{ section.id }} 1s linear infinite; display: none;
+  }
+  .sd-order-{{ section.id }} .sd-order__spinner.active { display: inline-block; }
+  @keyframes sd-spin-{{ section.id }} { to { transform: rotate(360deg); } }
+</style>
+
+<div class="sd-order-{{ section.id }}">
+  <div class="sd-order__box">
+    <h2 class="sd-order__title">{{ section.settings.heading | default: 'Choisis ton offre' }}</h2>
+
+    <div class="sd-order__tiers">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'tier' -%}
+          <button type="button" class="sd-order__tier-btn" data-required="{{ block.settings.quantity }}" data-price="{{ block.settings.price }}" data-label="{{ block.settings.label }}">{{ block.settings.label }}</button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'tier' -%}
+        <div class="sd-order__price" data-price-tag="{{ block.settings.price }}">{{ block.settings.price }} MAD</div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <p class="sd-order__hint">Sélectionne un article pour chaque emplacement — tu peux changer à tout moment.</p>
+    <p class="sd-order__status"></p>
+
+    <div class="sd-order__products">
+      <p class="sd-order__cat-title">{{ section.settings.products_title | default: 'Choisis tes articles' }}</p>
+      <div class="sd-order__grid" data-collection="{{ section.settings.collection.handle | default: 'all' }}"></div>
+    </div>
+
+    <div class="sd-order__checkbox">
+      <input type="checkbox" id="sd-confirm-{{ section.id }}">
+      <label for="sd-confirm-{{ section.id }}">Je confirme ma sélection</label>
+    </div>
+
+    <form class="sd-order__form" id="sd-order-form-{{ section.id }}">
+      <div class="sd-order__form-title">Tes informations de livraison</div>
+      <input type="text" name="first_name" placeholder="Prénom" required>
+      <input type="text" name="last_name" placeholder="Nom" required>
+      <input type="tel" name="phone" placeholder="Téléphone (06XXXXXXXX)" required pattern="[0-9]{9,12}" minlength="9" maxlength="12">
+      <input type="text" name="address" placeholder="Adresse complète" required>
+      <input type="text" name="city" placeholder="Ville" required>
+
+      <div class="sd-order__coupon">
+        <input type="text" name="coupon" placeholder="Code promo (optionnel)">
+        <button type="button" class="sd-order__apply-coupon">Appliquer</button>
+      </div>
+
+      <div class="sd-order__recap">
+        <div><span>Offre :</span> <span class="sd-order__recap-price">0 MAD</span></div>
+        <div class="sd-order__recap-coupon-row" style="display:none;"><span>Remise :</span> <span class="sd-order__recap-coupon">-0 MAD</span></div>
+        <div><span>Total :</span> <span class="sd-order__recap-total">0 MAD</span></div>
+      </div>
+
+      <input type="hidden" name="offer" class="sd-order__offer-label">
+      <input type="hidden" name="price" class="sd-order__offer-price">
+      <input type="hidden" name="products" class="sd-order__products-field">
+      <input type="hidden" name="source" value="{{ section.settings.utm_source | default: 'landing_page' }}">
+
+      <button type="submit" class="sd-order__submit">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 8h12l-1 12H7L6 8z" stroke="currentColor" stroke-width="2"/><path d="M9 8a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="2"/></svg>
+        {{ section.settings.button_text | default: 'Commander maintenant' }}
+        <span class="sd-order__spinner"></span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  var sectionId = "{{ section.id }}";
+  var webhookUrl = {{ section.settings.webhook_url | json }};
+  var thankYouUrl = {{ section.settings.thank_you_url | default: '/pages/merci' | json }};
+  var coupons = {};
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'coupon' -%}
+      coupons["{{ block.settings.code | upcase }}"] = {{ block.settings.discount | default: 0 }};
+    {%- endif -%}
+  {%- endfor -%}
+
+  var required = 0, selectedProducts = [], offerLabel = "", offerPrice = 0, appliedCoupon = null, couponDiscount = 0;
+
+  var tierButtons = root.querySelectorAll('.sd-order__tier-btn');
+  var priceTags = root.querySelectorAll('.sd-order__price');
+  var statusEl = root.querySelector('.sd-order__status');
+  var grid = root.querySelector('.sd-order__grid');
+  var recap = root.querySelector('.sd-order__recap');
+  var form = root.querySelector('form');
+
+  function setTier(btn) {
+    required = parseInt(btn.dataset.required, 10) || 1;
+    offerPrice = parseInt(btn.dataset.price, 10) || 0;
+    offerLabel = btn.dataset.label;
+    selectedProducts = [];
+    appliedCoupon = null; couponDiscount = 0;
+    form.querySelector('[name="coupon"]').value = "";
+
+    tierButtons.forEach(function (b) { b.classList.toggle('selected', b === btn); });
+    priceTags.forEach(function (p) { p.classList.toggle('active', p.dataset.priceTag === btn.dataset.price); });
+    updateStatus(); updateRecap();
+  }
+
+  function updateStatus() {
+    if (required > 0) {
+      statusEl.textContent = selectedProducts.length + '/' + required;
+      statusEl.classList.add('active');
+    } else {
+      statusEl.classList.remove('active');
+    }
+  }
+
+  function updateRecap() {
+    if (!offerLabel) { recap.classList.remove('active'); return; }
+    recap.classList.add('active');
+    recap.querySelector('.sd-order__recap-price').textContent = offerPrice + ' MAD';
+    var couponRow = recap.querySelector('.sd-order__recap-coupon-row');
+    if (appliedCoupon) {
+      couponRow.style.display = 'flex';
+      recap.querySelector('.sd-order__recap-coupon').textContent = '-' + couponDiscount + ' MAD';
+    } else {
+      couponRow.style.display = 'none';
+    }
+    var total = Math.max(offerPrice - couponDiscount, 0);
+    recap.querySelector('.sd-order__recap-total').textContent = total + ' MAD';
+    form.querySelector('.sd-order__offer-label').value = offerLabel;
+    form.querySelector('.sd-order__offer-price').value = total;
+    form.querySelector('.sd-order__products-field').value = selectedProducts.join('; ');
+  }
+
+  tierButtons.forEach(function (btn) { btn.addEventListener('click', function () { setTier(btn); }); });
+
+  function loadProducts() {
+    var handle = grid.dataset.collection;
+    fetch('/collections/' + handle + '/products.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data.products || !data.products.length) { grid.innerHTML = '<p>Aucun produit disponible.</p>'; return; }
+        grid.innerHTML = data.products.map(function (p) {
+          var outOfStock = p.variants.every(function (v) { return !v.available; });
+          var img = p.images.length ? p.images[0].src : '';
+          var detail = p.title + ' (ID:' + p.id + ')';
+          return '<div class="sd-order__item' + (outOfStock ? ' out-of-stock' : '') + '" data-detail="' + detail.replace(/"/g, '&quot;') + '">' +
+                 '<img src="' + img + '" alt="' + p.title.replace(/"/g, '&quot;') + '" loading="lazy"></div>';
+        }).join('');
+        grid.querySelectorAll('.sd-order__item:not(.out-of-stock)').forEach(function (item) {
+          item.addEventListener('click', function () { toggleProduct(item); });
+        });
+      })
+      .catch(function () { grid.innerHTML = '<p>Impossible de charger les produits.</p>'; });
+  }
+
+  function toggleProduct(item) {
+    var detail = item.dataset.detail;
+    var idx = selectedProducts.indexOf(detail);
+    if (idx > -1) {
+      selectedProducts.splice(idx, 1);
+      item.classList.remove('selected');
+    } else if (selectedProducts.length < required) {
+      selectedProducts.push(detail);
+      item.classList.add('selected');
+    } else {
+      alert('Tu peux choisir ' + required + ' article(s) maximum.');
+      return;
+    }
+    updateStatus(); updateRecap();
+  }
+
+  root.querySelector('.sd-order__apply-coupon').addEventListener('click', function () {
+    var code = form.querySelector('[name="coupon"]').value.trim().toUpperCase();
+    if (!code) { alert('Entre un code promo.'); return; }
+    if (coupons.hasOwnProperty(code)) {
+      appliedCoupon = code; couponDiscount = coupons[code];
+      alert('Code ' + code + ' appliqué : -' + couponDiscount + ' MAD.');
+    } else {
+      appliedCoupon = null; couponDiscount = 0;
+      alert('Code invalide.');
+    }
+    updateRecap();
+  });
+
+  form.querySelector('[name="phone"]').addEventListener('input', function (e) {
+    var v = e.target.value.replace(/\D/g, '').slice(0, 12);
+    e.target.value = v;
+    e.target.classList.toggle('invalid', v.length < 9 || v.length > 12);
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!offerLabel) { alert('Choisis une offre.'); return; }
+    if (selectedProducts.length !== required) { alert('Choisis ' + required + ' article(s).'); return; }
+    if (!document.getElementById('sd-confirm-' + sectionId).checked) { alert('Confirme ta sélection avant de commander.'); return; }
+
+    var btn = root.querySelector('.sd-order__submit');
+    var spinner = root.querySelector('.sd-order__spinner');
+    btn.disabled = true; spinner.classList.add('active');
+
+    var fd = new FormData(form);
+    var payload = Object.fromEntries(fd.entries());
+    payload.couponDiscount = couponDiscount;
+    payload.page_url = window.location.href;
+
+    if (!webhookUrl) {
+      console.warn('SouknDay: aucune URL de webhook configurée pour cette section — commande non envoyée.', payload);
+      window.location.href = thankYouUrl;
+      return;
+    }
+
+    fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json().catch(function () { return {}; }); })
+      .then(function () { window.location.href = thankYouUrl; })
+      .catch(function (err) {
+        console.error('Submission error:', err);
+        alert("Une erreur est survenue. Merci de réessayer.");
+        btn.disabled = false; spinner.classList.remove('active');
+      });
+  });
+
+  loadProducts();
+  if (tierButtons.length) { setTier(tierButtons[0]); }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "SouknDay – Commande COD (ads)",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titre", "default": "Choisis ton offre" },
+    { "type": "text", "id": "products_title", "label": "Titre section produits", "default": "Choisis tes articles" },
+    { "type": "collection", "id": "collection", "label": "Collection des produits sélectionnables" },
+    { "type": "text", "id": "button_text", "label": "Texte du bouton", "default": "Commander maintenant" },
+    { "type": "url", "id": "webhook_url", "label": "URL du webhook (Cloudflare Worker, Make, Zapier...)", "info": "Où seront envoyées les commandes. Laisser vide en test." },
+    { "type": "url", "id": "thank_you_url", "label": "Page de remerciement après commande" },
+    { "type": "text", "id": "utm_source", "label": "Source (pour tracking pub)", "default": "facebook_ads" }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Palier d'offre",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Nom du palier", "default": "1 article" },
+        { "type": "number", "id": "quantity", "label": "Nombre d'articles à choisir", "default": 1 },
+        { "type": "number", "id": "price", "label": "Prix (MAD)", "default": 179 }
+      ]
+    },
+    {
+      "type": "coupon",
+      "name": "Code promo",
+      "settings": [
+        { "type": "text", "id": "code", "label": "Code" },
+        { "type": "number", "id": "discount", "label": "Remise (MAD)", "default": 0 }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SouknDay – Commande COD (ads)",
+      "blocks": [
+        { "type": "tier", "settings": { "label": "1 article", "quantity": 1, "price": 179 } },
+        { "type": "tier", "settings": { "label": "2 articles (-30%)", "quantity": 2, "price": 249 } }
+      ]
+    }
+  ]
+}
+{% endschema %}
