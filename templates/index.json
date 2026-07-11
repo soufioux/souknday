@@ -31,9 +31,9 @@
           "type": "category",
           "settings": {
             "title": "Auto moto",
-            "collection": "",
+            "collection": "auto-moto",
             "image": "shopify://shop_images/output_image_53.webp",
-            "link": ""
+            "link": "shopify://collections/auto-moto"
           }
         },
         "cat_2": {
