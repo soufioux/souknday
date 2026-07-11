@@ -13,7 +13,7 @@
       "type": "sd-hero",
       "settings": {
         "pill_text": "Marketplace marocaine · Tout en un seul endroit",
-        "heading": "Trouve tout. <em>Un seul souk.</em> Livré chez toi.",
+        "heading": "Trouve tout. Un seul souk. Livré chez toi.",
         "subtitle": "Mode, maison, beauté, tech — des produits sélectionnés avec soin, à prix accessible, livrés partout au Maroc.",
         "button_1_text": "Découvrir la boutique",
         "button_1_link": "/collections/all",
@@ -38,7 +38,6 @@
         },
         "cat_2": {
           "type": "category",
-          "disabled": true,
           "settings": {
             "title": "Maison & déco",
             "collection": "",
