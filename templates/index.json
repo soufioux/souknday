@@ -58,9 +58,9 @@
           "type": "category",
           "settings": {
             "title": "Tech & accessoires",
-            "collection": "",
+            "collection": "tech-accessoires",
             "image": "shopify://shop_images/output_image_51.webp",
-            "link": "/collections/all"
+            "link": "shopify://collections/tech-accessoires"
           }
         }
       },
